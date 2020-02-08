@@ -7,7 +7,7 @@ ENV OPENSSH_SERVER_VERSION 1:7.6p1-4
 # Update and install as root
 RUN apt-get update && \
     apt-get install -y \
-        openssh-server=${OPENSSH_SERVER_VERSION} \
+        openssh-server \
     && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* \
