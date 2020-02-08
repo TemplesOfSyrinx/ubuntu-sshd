@@ -1,20 +1,25 @@
 FROM       ubuntu:18.04
-MAINTAINER Aleksandar Diklic "https://github.com/rastasheep"
+MAINTAINER Priests of the Temple of Syrinx "https://github.com/orgs/TemplesOfSyrinx/teams/priests"
 
-RUN apt-get update
+# Set which versions to use
+ENV OPENSSH-SERVER_VERSION 1:7.6p1-4
 
-RUN apt-get install -y openssh-server
+# Update and install as root
+RUN apt-get update && \
+    apt-get install -y \
+        openssh-server=${OPENSSH-SERVER_VERSION} \
+    && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* \
+           /tmp/* \
+           /var/tmp/*
+
 RUN mkdir /var/run/sshd
 
 RUN echo 'root:root' |chpasswd
 
 RUN sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
 RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
-
-RUN mkdir /root/.ssh
-
-RUN apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 EXPOSE 22
 
